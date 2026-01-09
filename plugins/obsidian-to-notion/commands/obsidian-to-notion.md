@@ -5,7 +5,17 @@ description: |-
   と言われたときに使用。指定されたObsidianファイルを読み取り、
   Notion記法に変換して既存ページの更新または新規ページ作成を行う。
   プレビューを表示してから反映する。
-user-invocable: true
+allowed-tools:
+  - Read
+  - Glob
+  - Grep
+  - TodoRead
+  - TodoWrite
+  - AskUserQuestion
+  - mcp__plugin_Notion_notion__notion-search
+  - mcp__plugin_Notion_notion__notion-fetch
+  - mcp__plugin_Notion_notion__notion-create-pages
+  - mcp__plugin_Notion_notion__notion-update-page
 ---
 
 # Obsidian to Notion
