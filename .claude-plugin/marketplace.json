@@ -1,0 +1,21 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "showichiro-claude-plugins",
+  "version": "1.0.0",
+  "description": "Showichiroのカスタムプラグインマーケットプレイス",
+  "owner": {
+    "name": "Showichiro"
+  },
+  "plugins": [
+    {
+      "name": "obsidian-to-notion",
+      "description": "ObsidianのドキュメントをNotionに反映するスキル",
+      "version": "1.0.0",
+      "author": {
+        "name": "Showichiro"
+      },
+      "source": "./plugins/obsidian-to-notion",
+      "category": "productivity"
+    }
+  ]
+}
