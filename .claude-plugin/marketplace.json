@@ -16,6 +16,16 @@
         "name": "Showichiro"
       },
       "keywords": ["obsidian", "notion", "sync", "markdown", "document"]
+    },
+    {
+      "name": "worktree-plus",
+      "source": "./plugins/worktree-plus",
+      "description": "Git worktree管理を支援するプラグイン（wtp連携）",
+      "version": "1.0.0",
+      "author": {
+        "name": "Showichiro"
+      },
+      "keywords": ["git", "worktree", "wtp", "branch", "workspace"]
     }
   ]
 }

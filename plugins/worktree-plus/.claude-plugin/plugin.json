@@ -1,0 +1,11 @@
+{
+  "name": "worktree-plus",
+  "version": "1.0.0",
+  "description": "Git worktree管理を支援するプラグイン（wtp連携）",
+  "author": {
+    "name": "Showichiro"
+  },
+  "repository": "https://github.com/Showichiro/claude-code",
+  "license": "GPL-3.0",
+  "keywords": ["git", "worktree", "wtp", "branch", "workspace"]
+}
