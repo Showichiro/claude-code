@@ -42,6 +42,7 @@ Then in Claude Code:
 | Plugin | Description |
 |--------|-------------|
 | [obsidian-to-notion](plugins/obsidian-to-notion/) | Convert Obsidian documents to Notion format |
+| [worktree-plus](plugins/worktree-plus/) | Git worktree management with wtp CLI |
 
 ## Skills
 
@@ -65,6 +66,37 @@ This skill helps convert Obsidian markdown files to Notion-compatible format, ha
 ```
 
 Or simply say "Notionに反映して" while viewing an Obsidian file.
+
+### `/wtp-*` - Git Worktree Management
+
+Manage Git worktrees using the [wtp](https://github.com/satococoa/wtp) CLI tool.
+
+**Prerequisites:**
+```bash
+# Homebrew (macOS)
+brew install satococoa/tap/wtp
+
+# Go
+go install github.com/satococoa/wtp/v2/cmd/wtp@latest
+```
+
+**Available Commands:**
+| Command | Description |
+|---------|-------------|
+| `/wtp-list` | List all worktrees |
+| `/wtp-add <branch>` | Create worktree from existing branch |
+| `/wtp-new <branch> [base]` | Create worktree with new branch |
+| `/wtp-remove [worktree]` | Remove worktree and branch |
+| `/wtp-config` | Manage .wtp.yml configuration |
+
+**Usage:**
+```
+/wtp-list
+/wtp-add feature/auth
+/wtp-new feature/new-feature main
+```
+
+You can also use natural language (e.g., "I want to work on feature/auth branch").
 
 ## Plugin Structure
 
