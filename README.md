@@ -43,6 +43,7 @@ Then in Claude Code:
 |--------|-------------|
 | [obsidian-to-notion](plugins/obsidian-to-notion/) | Convert Obsidian documents to Notion format |
 | [worktree-plus](plugins/worktree-plus/) | Git worktree management with wtp CLI |
+| [openai-codex](plugins/openai-codex/) | Run OpenAI Codex CLI in non-interactive mode |
 
 ## Skills
 
@@ -97,6 +98,38 @@ go install github.com/satococoa/wtp/v2/cmd/wtp@latest
 ```
 
 You can also use natural language (e.g., "I want to work on feature/auth branch").
+
+### `/codex-exec` - OpenAI Codex CLI
+
+Run [OpenAI Codex CLI](https://github.com/openai/codex) in non-interactive mode.
+
+**Prerequisites:**
+```bash
+npm install -g @openai/codex
+codex login
+```
+
+**Available Commands:**
+| Command | Description |
+|---------|-------------|
+| `/codex-exec` | Run Codex CLI in non-interactive mode |
+
+**Options:**
+| Option | Short | Description |
+|--------|-------|-------------|
+| `--model` | `-m` | Specify model (gpt-5-codex, gpt-5, etc.) |
+| `--json` | - | Output in JSON format |
+| `--sandbox` | `-s` | Sandbox policy (read-only, workspace-write, etc.) |
+| `--search` | - | Enable web search |
+
+**Usage:**
+```
+/codex-exec "explain this code"
+/codex-exec "refactor this" --model gpt-5
+/codex-exec "update README.md" --sandbox workspace-write
+```
+
+You can also use natural language with keywords like "Codex", "Codexで実行", "Codexに任せて".
 
 ## Plugin Structure
 
