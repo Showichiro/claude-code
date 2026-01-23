@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "showichiro-claude-plugins",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Showichiroのカスタムプラグインマーケットプレイス",
   "owner": {
     "name": "Showichiro"
@@ -26,6 +26,16 @@
         "name": "Showichiro"
       },
       "keywords": ["git", "worktree", "wtp", "branch", "workspace"]
+    },
+    {
+      "name": "openai-codex",
+      "source": "./plugins/openai-codex",
+      "description": "OpenAI Codex CLI（非対話モード）を呼び出すプラグイン",
+      "version": "1.0.0",
+      "author": {
+        "name": "Showichiro"
+      },
+      "keywords": ["openai", "codex", "gpt", "coding-agent"]
     }
   ]
 }

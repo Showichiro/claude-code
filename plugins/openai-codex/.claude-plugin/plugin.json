@@ -1,0 +1,11 @@
+{
+  "name": "openai-codex",
+  "version": "1.0.0",
+  "description": "OpenAI Codex CLI（非対話モード）を呼び出すプラグイン",
+  "author": {
+    "name": "Showichiro"
+  },
+  "repository": "https://github.com/Showichiro/claude-code",
+  "license": "GPL-3.0",
+  "keywords": ["openai", "codex", "gpt", "coding-agent"]
+}
