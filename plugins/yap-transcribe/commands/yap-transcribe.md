@@ -9,6 +9,7 @@ allowed-tools:
   - Write
   - Glob
   - AskUserQuestion
+  - mcp__yap__transcribe
 ---
 
 # yap-transcribe
@@ -53,25 +54,34 @@ macOS の Speech.framework を利用するため、インターネット接続�
 
 ## 実行手順
 
-1. **yap インストール確認**
-   ```bash
-   which yap
-   ```
-   - 未インストールの場合:
-     ```bash
-     brew install yap
-     ```
-
-2. **入力ファイルの確認**
+1. **入力ファイルの確認**
    - 引数で指定されていない場合は AskUserQuestion で確認
    - ファイルが存在するか確認
 
-3. **オプションの解析**
+2. **オプションの解析**
    - 指定されたオプションをそのまま使用
    - 日本語ファイルの場合、`--locale ja-JP` を自動付与（ユーザーの指定がなければ推定）
 
-4. **yap transcribe 実行**
+3. **文字起こし実行（MCP ツール優先）**
+
+   MCP サーバーが利用可能な場合は `mcp__yap__transcribe` ツールを優先的に使用する:
+
+   ```
+   mcp__yap__transcribe:
+     file: "/absolute/path/to/audio.mp3"   # 必須: 絶対パス
+     locale: "ja-JP"                        # 任意: BCP 47 ロケール
+     format: "txt"                          # 任意: "txt" or "srt"
+     censor: false                          # 任意: マスク
+     maxLength: 40                          # 任意: SRT最大文字数
+   ```
+
+4. **フォールバック: CLI 経由（MCP ツールが使えない場合）**
+
    ```bash
+   # yap インストール確認
+   which yap
+   # 未インストールの場合: brew install yap
+
    # 基本実行（テキスト出力）
    yap transcribe "audio.mp3"
 

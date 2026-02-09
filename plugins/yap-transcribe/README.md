@@ -11,6 +11,7 @@
 
 ## 機能
 
+- **MCP サーバー統合**: yap MCP サーバー (`mcp__yap__transcribe`) による直接ツール呼び出し
 - **スラッシュコマンド**: `/yap-transcribe <file> [options]` で直接実行
 - **自然言語トリガー**: 「文字起こしして」「字幕を作成して」等のキーワードで自動検知
 - **多言語対応**: `--locale` による言語ロケール指定
@@ -40,6 +41,7 @@
 yap-transcribe/
 ├── .claude-plugin/
 │   └── plugin.json
+├── .mcp.json                 # yap MCP サーバー設定
 ├── README.md
 ├── commands/
 │   └── yap-transcribe.md

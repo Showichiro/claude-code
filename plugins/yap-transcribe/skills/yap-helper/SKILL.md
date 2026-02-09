@@ -11,6 +11,7 @@ allowed-tools:
   - Glob
   - Grep
   - AskUserQuestion
+  - mcp__yap__transcribe
 ---
 
 # yap-helper
@@ -76,9 +77,26 @@ allowed-tools:
 | 「mp3ファイルの内容を教えて」 | yap transcribe（結果を表示） |
 | 「講義動画をSRTにして」 | yap transcribe --srt -o lecture.srt |
 
-## 実行コマンド
+## 実行方法
 
-### インストール確認
+### 優先: MCP ツール経由（mcp__yap__transcribe）
+
+MCP サーバーが利用可能な場合は `mcp__yap__transcribe` ツールを優先的に使用する。
+
+```
+mcp__yap__transcribe:
+  file: "/absolute/path/to/file.mp3"    # 必須: 絶対パス
+  locale: "ja-JP"                        # 任意: BCP 47 ロケール
+  format: "txt"                          # 任意: "txt" or "srt"（デフォルト: "txt"）
+  censor: false                          # 任意: マスク（デフォルト: false）
+  maxLength: 40                          # 任意: SRT最大文字数（デフォルト: 40）
+```
+
+### フォールバック: CLI 経由（Bash）
+
+MCP ツールが利用できない場合は Bash で yap CLI を直接実行する。
+
+#### インストール確認
 
 ```bash
 which yap
@@ -89,31 +107,31 @@ which yap
 brew install yap
 ```
 
-### 基本的な文字起こし
+#### 基本的な文字起こし
 
 ```bash
 yap transcribe "file.mp3"
 ```
 
-### 日本語ロケール指定
+#### 日本語ロケール指定
 
 ```bash
 yap transcribe -l ja-JP "file.mp3"
 ```
 
-### SRT字幕出力
+#### SRT字幕出力
 
 ```bash
 yap transcribe --srt "video.mp4"
 ```
 
-### ファイルに保存
+#### ファイルに保存
 
 ```bash
 yap transcribe -o transcript.txt "file.mp3"
 ```
 
-### SRT字幕をファイルに保存
+#### SRT字幕をファイルに保存
 
 ```bash
 yap transcribe --srt -o captions.srt "video.mp4"
