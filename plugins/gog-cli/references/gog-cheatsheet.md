@@ -439,7 +439,7 @@ gog --json drive search "invoice filetype:pdf" --max 20 | \
 ```bash
 gog --json gmail search 'from:noreply@example.com' --max 200 | \
   jq -r '.threads[].id' | \
-  xargs -n 50 gog gmail labels modify --add IMPORTANT
+  xargs -n 50 gog gmail batch modify --add IMPORTANT
 ```
 
 ### CSV からスプレッドシートを更新

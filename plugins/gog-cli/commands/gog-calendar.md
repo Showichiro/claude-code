@@ -30,7 +30,7 @@ gog CLI を使って Google Calendar を操作するコマンド。
 
 ## ワークフロー
 
-```
+```text
 /gog-calendar [操作] [引数...] 実行
   │
   ├─ gog インストール確認

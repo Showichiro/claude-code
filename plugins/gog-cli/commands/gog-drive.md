@@ -30,6 +30,7 @@ gog CLI を使って Google Drive を操作するコマンド。
 | `delete` | ゴミ箱へ移動 |
 | `share` / `unshare` | 共有管理 |
 | `permissions` | 権限確認 |
+| `url` | Web URL 取得 |
 | `drives` | 共有ドライブ一覧 |
 
 ## 実行手順

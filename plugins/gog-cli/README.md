@@ -2,7 +2,7 @@
 
 Google Suite CLI ([gogcli](https://github.com/steipete/gogcli)) の操作を支援する Claude Code プラグイン。
 
-Gmail, Calendar, Drive, Contacts, Tasks, Sheets, Chat, Docs, Slides などの Google サービスをターミナルから操作できます。
+Gmail, Calendar, Drive, Contacts, Tasks, Sheets の操作コマンドを提供します。Chat, Docs, Slides はチートシート経由で参照可能です。
 
 ## 前提条件
 

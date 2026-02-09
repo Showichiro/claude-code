@@ -99,7 +99,7 @@ allowed-tools:
 ### インストール確認
 
 ```bash
-which gog
+command -v gog
 ```
 
 未インストールの場合:
@@ -143,6 +143,7 @@ gog calendar events primary --today --json
 - ファイル削除 (`gog drive delete`)
 - 連絡先削除 (`gog contacts delete`)
 - タスク削除 / クリア (`gog tasks delete`, `gog tasks clear`)
+- シート範囲クリア (`gog sheets clear`)
 
 ## 補足
 
