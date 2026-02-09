@@ -40,12 +40,12 @@
     {
       "name": "gog-cli",
       "source": "./plugins/gog-cli",
-      "description": "Google Suite CLI (gog) の操作を支援するプラグイン — Gmail, Calendar, Drive, Contacts, Tasks, Sheets, Chat 等",
-      "version": "1.0.0",
+      "description": "Google Suite CLI (gog) の操作を支援するプラグイン — Gmail, Calendar, Drive, Contacts, Tasks, Sheets, Docs, Slides, Chat, Classroom, People, Groups, Keep",
+      "version": "2.0.0",
       "author": {
         "name": "Showichiro"
       },
-      "keywords": ["google", "gmail", "calendar", "drive", "gog", "cli", "sheets", "tasks", "contacts"]
+      "keywords": ["google", "gmail", "calendar", "drive", "gog", "cli", "sheets", "tasks", "contacts", "chat", "classroom", "docs", "slides", "people", "groups", "keep"]
     }
   ]
 }
