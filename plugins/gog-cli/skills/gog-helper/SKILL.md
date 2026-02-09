@@ -2,7 +2,8 @@
 description: |-
   Google Suite CLI (gog) の操作を支援。
   「メール」「Gmail」「カレンダー」「予定」「Drive」「スプレッドシート」
-  「gog」「連絡先」「タスク」「Google」などのキーワードで自動トリガー。
+  「gog」「連絡先」「タスク」「Google」「Chat」「Classroom」「Docs」
+  「Slides」「Keep」「Groups」「People」などのキーワードで自動トリガー。
   gog コマンドを使用して Google サービスを操作。
 allowed-tools:
   - Bash
@@ -22,29 +23,60 @@ allowed-tools:
 - `Gmail`, `Google Calendar`, `Google Drive`
 - `Google Sheets`, `Google Tasks`, `Google Chat`
 - `Google Docs`, `Google Slides`
+- `Google Classroom`, `Google Keep`
+- `Google Groups`, `Google People`
 
 ### 意図推定キーワード（メール系）
 - `メールを確認`, `メールを検索`, `メールを送って`
 - `未読メール`, `最近のメール`
 - `メールの添付ファイル`, `メールをダウンロード`
 - `下書きを作成`, `下書きを送信`
+- `メールを追跡`, `開封確認`
+- `メール転送`, `不在設定`
 
 ### 意図推定キーワード（カレンダー系）
 - `今日の予定`, `明日の予定`, `今週の予定`
 - `予定を作成`, `ミーティングを入れて`
 - `空き時間を確認`, `スケジュール`
 - `予定を更新`, `予定を削除`
+- `集中時間`, `フォーカスタイム`
+- `不在`, `Out of Office`
+- `勤務場所`, `オフィス出勤`
+- `チームの予定`, `招待に返事`
 
 ### 意図推定キーワード（Drive / ファイル系）
 - `ファイルを検索`, `ファイルをアップロード`
 - `ファイルをダウンロード`, `共有設定`
 - `フォルダを作成`, `ファイルを移動`
 
-### 意図推定キーワード（その他）
+### 意図推定キーワード（シート系）
 - `スプレッドシート`, `シートを読む`, `シートに書き込む`
+- `シートを作成`, `シートをエクスポート`
+
+### 意図推定キーワード（連絡先系）
 - `連絡先を検索`, `連絡先を追加`
+- `ディレクトリ検索`
+
+### 意図推定キーワード（タスク系）
 - `タスクを追加`, `タスク一覧`, `タスク完了`
+
+### 意図推定キーワード（ドキュメント / プレゼン系）
 - `ドキュメントをエクスポート`, `PDF に変換`
+- `スライドをエクスポート`, `プレゼンを作成`
+- `ドキュメントの内容を読む`
+
+### 意図推定キーワード（Chat 系）
+- `チャットを送る`, `メッセージを送信`
+- `チャットスペース`, `DM を送る`
+- `未読メッセージ`
+
+### 意図推定キーワード（Classroom 系）
+- `コースを確認`, `課題を出す`, `成績をつける`
+- `お知らせを投稿`, `名簿を確認`
+
+### 意図推定キーワード（その他）
+- `プロフィールを確認`, `グループ一覧`
+- `メモを確認` (Keep)
 
 ## ワークフロー
 
@@ -66,6 +98,12 @@ allowed-tools:
   │     ├─ タスク操作 → Tasks コマンド群
   │     ├─ 連絡先操作 → Contacts コマンド群
   │     ├─ チャット → Chat コマンド群
+  │     ├─ 教室操作 → Classroom コマンド群
+  │     ├─ ドキュメント → Docs コマンド群
+  │     ├─ プレゼン → Slides コマンド群
+  │     ├─ プロフィール → People コマンド群
+  │     ├─ グループ → Groups コマンド群
+  │     ├─ メモ → Keep コマンド群
   │     └─ 不明 → AskUserQuestion で確認
   │
   └─ gog コマンド実行
@@ -82,9 +120,12 @@ allowed-tools:
 | 「○○にメールを送って」 | `gog gmail send --to ... --subject ... --body ...` |
 | 「未読メールを見せて」 | `gog gmail search 'is:unread' --max 20` |
 | 「添付ファイルをダウンロード」 | `gog gmail thread get <id> --download` |
+| 「メールの開封を追跡して」 | `gog gmail send ... --track` |
 | 「今日の予定を教えて」 | `gog calendar events primary --today` |
 | 「明日ミーティングを入れて」 | `gog calendar create primary --summary ... --from ... --to ...` |
 | 「空いてる時間を確認」 | `gog calendar freebusy --calendars primary --from ... --to ...` |
+| 「集中時間をブロックして」 | `gog calendar focus-time --from ... --to ...` |
+| 「チームの予定を見せて」 | `gog calendar team <group-email> --today` |
 | 「Drive でファイルを探して」 | `gog drive search "..." --max 20` |
 | 「ファイルをアップロードして」 | `gog drive upload ./path --parent <folderId>` |
 | 「スプレッドシートを読んで」 | `gog sheets get <id> 'Sheet1!A1:Z100'` |
@@ -93,6 +134,15 @@ allowed-tools:
 | 「タスクを追加して」 | `gog tasks add <listId> --title "タスク名"` |
 | 「タスクを完了にして」 | `gog tasks done <listId> <taskId>` |
 | 「ドキュメントを PDF にして」 | `gog docs export <docId> --format pdf` |
+| 「ドキュメントの内容を確認して」 | `gog docs cat <docId>` |
+| 「スライドをエクスポートして」 | `gog slides export <id> --format pptx` |
+| 「チャットでメッセージを送って」 | `gog chat messages send spaces/<id> --text "..."` |
+| 「DM を送って」 | `gog chat dm send user@company.com --text "..."` |
+| 「コースの一覧を見せて」 | `gog classroom courses list` |
+| 「課題の成績をつけて」 | `gog classroom submissions grade <courseId> <cwId> <subId> --grade 90` |
+| 「プロフィールを見せて」 | `gog people me` |
+| 「グループのメンバーを確認」 | `gog groups members <group-email>` |
+| 「Keep のメモを検索して」 | `gog keep search <query>` |
 
 ## 実行コマンド
 
@@ -132,6 +182,7 @@ gog calendar events primary --today --json
 | スコープ不足 (403) | `gog auth add <email> --services <service> --force-consent` を案内 |
 | API レートリミット | 少し待ってからリトライを提案 |
 | アカウント指定なし | `gog auth list` で確認し `--account` 指定を案内 |
+| Workspace 機能 (Chat/Groups/Keep) | Workspace アカウントが必要であることを案内 |
 
 ## 破壊的操作の確認
 
@@ -144,6 +195,9 @@ gog calendar events primary --today --json
 - 連絡先削除 (`gog contacts delete`)
 - タスク削除 / クリア (`gog tasks delete`, `gog tasks clear`)
 - シート範囲クリア (`gog sheets clear`)
+- チャット送信 (`gog chat messages send`, `gog chat dm send`)
+- お知らせ投稿 (`gog classroom announcements create`)
+- 成績付与 (`gog classroom submissions grade`)
 
 ## 補足
 
@@ -152,3 +206,5 @@ gog calendar events primary --today --json
 - 大量のデータを取得する際は `--max` で件数を制限
 - カレンダーの時刻指定は ISO 8601 形式（例: `2025-01-15T10:00:00Z`）
 - `GOG_ACCOUNT` 環境変数でデフォルトアカウントを設定可能
+- Chat / Groups / Keep は Workspace アカウントが必要
+- Keep は追加でサービスアカウント（ドメイン委任）が必要

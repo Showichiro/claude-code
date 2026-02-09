@@ -2,7 +2,7 @@
 description: |-
   gog CLI の認証・アカウント管理を行う。
   「/gog-auth [操作]」でクレデンシャル設定・アカウント追加・確認を実行。
-  credentials, add, list, status, remove, alias, keyring 等をサポート。
+  credentials, add, list, status, remove, alias, keyring, service-account, manage, tokens 等をサポート。
 allowed-tools:
   - Bash
   - AskUserQuestion
@@ -27,6 +27,11 @@ gog CLI の認証とアカウント管理を行うコマンド。
 | `alias list` | エイリアス一覧 |
 | `keyring [backend]` | キーリング設定 |
 | `services` | 利用可能なサービス一覧 |
+| `service-account set <email> --key <path>` | サービスアカウント設定（Workspace） |
+| `service-account status <email>` | サービスアカウント状態 |
+| `service-account unset <email>` | サービスアカウント削除 |
+| `manage` | ブラウザでアカウントマネージャーを開く |
+| `tokens` | 保存済みリフレッシュトークン管理 |
 
 ## 実行手順
 
@@ -74,6 +79,40 @@ gog auth add you@gmail.com --services sheets --force-consent
 gog auth keyring                  # 現在の設定
 gog auth keyring file             # ファイルベースに変更
 gog auth keyring keychain         # macOS Keychain に変更
+```
+
+### サービスアカウント（Workspace ドメイン委任）
+
+```bash
+# サービスアカウントキーを設定
+gog auth service-account set you@yourdomain.com --key ~/Downloads/service-account.json
+
+# 状態確認
+gog auth service-account status you@yourdomain.com
+
+# 削除
+gog auth service-account unset you@yourdomain.com
+```
+
+### Drive スコープ制御
+
+```bash
+gog auth add you@gmail.com --services drive --drive-scope full       # フルアクセス（デフォルト）
+gog auth add you@gmail.com --services drive --drive-scope readonly   # 読み取り専用
+gog auth add you@gmail.com --services drive --drive-scope file       # アプリ作成ファイルのみ
+```
+
+### ドメインマッピング
+
+```bash
+gog --client work auth credentials ~/Downloads/work.json --domain example.com
+```
+
+### その他
+
+```bash
+gog auth manage                   # ブラウザでアカウントマネージャーを開く
+gog auth tokens                   # 保存済みリフレッシュトークン管理
 ```
 
 ## エラーハンドリング
