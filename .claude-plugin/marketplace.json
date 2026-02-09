@@ -46,6 +46,16 @@
         "name": "Showichiro"
       },
       "keywords": ["google", "gmail", "calendar", "drive", "gog", "cli", "sheets", "tasks", "contacts", "chat", "classroom", "docs", "slides", "people", "groups", "keep"]
+    },
+    {
+      "name": "yap-transcribe",
+      "source": "./plugins/yap-transcribe",
+      "description": "音声・動画ファイルの文字起こしを支援するプラグイン（yap連携）",
+      "version": "1.0.0",
+      "author": {
+        "name": "Showichiro"
+      },
+      "keywords": ["yap", "transcribe", "speech", "audio", "video", "srt", "caption", "文字起こし"]
     }
   ]
 }

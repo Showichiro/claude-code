@@ -1,0 +1,11 @@
+{
+  "name": "yap-transcribe",
+  "version": "1.0.0",
+  "description": "音声・動画ファイルの文字起こしを支援するプラグイン（yap連携）",
+  "author": {
+    "name": "Showichiro"
+  },
+  "repository": "https://github.com/Showichiro/claude-code",
+  "license": "GPL-3.0",
+  "keywords": ["yap", "transcribe", "speech", "audio", "video", "srt", "caption", "文字起こし"]
+}
