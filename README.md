@@ -44,6 +44,7 @@ Then in Claude Code:
 | [obsidian-to-notion](plugins/obsidian-to-notion/) | Convert Obsidian documents to Notion format |
 | [worktree-plus](plugins/worktree-plus/) | Git worktree management with wtp CLI |
 | [openai-codex](plugins/openai-codex/) | Run OpenAI Codex CLI in non-interactive mode |
+| [gog-cli](plugins/gog-cli/) | Google Suite CLI (gog) for Gmail, Calendar, Drive, Sheets, Tasks, Contacts |
 
 ## Skills
 
@@ -130,6 +131,38 @@ codex login
 ```
 
 You can also use natural language with keywords like "Codex", "Codexで実行", "Codexに任せて".
+
+### `/gog-*` - Google Suite CLI
+
+Operate Google services via [gog CLI (gogcli)](https://github.com/steipete/gogcli) from the terminal.
+
+**Prerequisites:**
+```bash
+brew install steipete/tap/gogcli
+gog auth credentials ~/Downloads/client_secret_....json
+gog auth add you@gmail.com
+```
+
+**Available Commands:**
+| Command | Description |
+|---------|-------------|
+| `/gog-auth` | Authentication & account management |
+| `/gog-gmail` | Gmail (search, send, labels, drafts, filters) |
+| `/gog-calendar` | Calendar (events, create, update, freebusy) |
+| `/gog-drive` | Drive (list, search, upload, download, share) |
+| `/gog-sheets` | Sheets (read, write, create, export) |
+| `/gog-tasks` | Tasks (list, add, done, delete) |
+| `/gog-contacts` | Contacts (search, create, update, delete) |
+
+**Usage:**
+```
+/gog-gmail search 'newer_than:7d' --max 10
+/gog-calendar events primary --today
+/gog-drive search "report" --max 20
+/gog-sheets get <spreadsheetId> 'Sheet1!A1:B10'
+```
+
+You can also use natural language (e.g., "メールを確認して", "今日の予定を教えて", "ファイルを検索して").
 
 ## Plugin Structure
 
