@@ -45,6 +45,7 @@ Then in Claude Code:
 | [worktree-plus](plugins/worktree-plus/) | Git worktree management with wtp CLI |
 | [openai-codex](plugins/openai-codex/) | Run OpenAI Codex CLI in non-interactive mode |
 | [gog-cli](plugins/gog-cli/) | Google Suite CLI (gog) for Gmail, Calendar, Drive, Sheets, Tasks, Contacts |
+| [yap-transcribe](plugins/yap-transcribe/) | On-device speech transcription with yap CLI + MCP server |
 
 ## Skills
 
@@ -163,6 +164,39 @@ gog auth add you@gmail.com
 ```
 
 You can also use natural language (e.g., "メールを確認して", "今日の予定を教えて", "ファイルを検索して").
+
+### `/yap-transcribe` - Speech Transcription
+
+On-device speech transcription using [yap](https://github.com/finnvoor/yap) CLI and MCP server.
+
+**Prerequisites:**
+```bash
+brew install yap
+```
+
+**Available Commands:**
+| Command | Description |
+|---------|-------------|
+| `/yap-transcribe` | Transcribe audio/video files |
+
+**Options:**
+| Option | Short | Description |
+|--------|-------|-------------|
+| `--locale` | `-l` | Language locale (ja-JP, en-US, etc.) |
+| `--srt` | - | Output in SRT subtitle format |
+| `--censor` | - | Redact inappropriate words |
+| `--output-file` | `-o` | Save output to file |
+| `--max-length` | `-m` | Max sentence length for SRT (default: 40) |
+
+**Usage:**
+```
+/yap-transcribe recording.mp3
+/yap-transcribe meeting.mp4 --srt -o meeting.srt --locale ja-JP
+```
+
+You can also use natural language (e.g., "この音声を文字起こしして", "動画に字幕を付けて").
+
+MCP server integration is also available — the `mcp__yap__transcribe` tool is preferred when the MCP server is running.
 
 ## Plugin Structure
 
