@@ -56,6 +56,16 @@
         "name": "Showichiro"
       },
       "keywords": ["yap", "transcribe", "speech", "audio", "video", "srt", "caption", "文字起こし"]
+    },
+    {
+      "name": "obsidian-cli",
+      "source": "./plugins/obsidian-cli",
+      "description": "Obsidian CLIを使ったノート操作を支援するプラグイン",
+      "version": "1.0.0",
+      "author": {
+        "name": "Showichiro"
+      },
+      "keywords": ["obsidian", "obsidian-cli", "note", "vault", "markdown", "ノート", "ナレッジベース"]
     }
   ]
 }
