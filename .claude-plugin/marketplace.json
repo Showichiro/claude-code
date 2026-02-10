@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "showichiro-claude-plugins",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Showichiroのカスタムプラグインマーケットプレイス",
   "owner": {
     "name": "Showichiro"
@@ -56,6 +56,16 @@
         "name": "Showichiro"
       },
       "keywords": ["yap", "transcribe", "speech", "audio", "video", "srt", "caption", "文字起こし"]
+    },
+    {
+      "name": "obsidian-cli",
+      "source": "./plugins/obsidian-cli",
+      "description": "Obsidian CLIを使ったノート操作を支援するプラグイン",
+      "version": "1.0.0",
+      "author": {
+        "name": "Showichiro"
+      },
+      "keywords": ["obsidian", "obsidian-cli", "note", "vault", "markdown", "ノート", "ナレッジベース"]
     }
   ]
 }
