@@ -1,6 +1,6 @@
 {
   "name": "obsidian-to-notion",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "ObsidianのドキュメントをNotionに反映するスキル",
   "author": {
     "name": "Showichiro"
