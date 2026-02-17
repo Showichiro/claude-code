@@ -7,6 +7,5 @@
   },
   "repository": "https://github.com/Showichiro/claude-code",
   "license": "GPL-3.0",
-  "keywords": ["obsidian", "notion", "sync", "markdown", "document"],
-  "skills": "./skills/"
+  "keywords": ["obsidian", "notion", "sync", "markdown", "document"]
 }
