@@ -2,7 +2,7 @@
 description: |-
   Obsidianのノート内容を表示する。
   「/obs-print <note-name> [options]」でノート内容を標準出力に表示。
-  --vault オプションをサポート。
+  file=, path=, vault= をサポート。
 allowed-tools:
   - Bash
   - Read
@@ -11,53 +11,36 @@ allowed-tools:
 
 # obs-print
 
-obsidian-cli を使用してノートの内容を標準出力に表示するコマンド。
+公式 Obsidian CLI を使用してノートの内容を標準出力に表示するコマンド。
 
-## ワークフロー
+## 使い方
 
 ```
-/obs-print <note-name> [options] 実行
-  │
-  ├─ obsidian-cli インストール確認
-  │
-  ├─ ノート名確認
-  │     ├─ 引数あり → そのまま使用
-  │     └─ 引数なし → AskUserQuestion で確認
-  │
-  └─ obsidian-cli print 実行
-        ├─ 成功 → ノート内容を表示
-        └─ エラー → 対処法を提案
+/obs-print Recipe                 → ノート名で読む
+/obs-print inbox/note.md          → パスで読む
+/obs-print Recipe vault=MyVault   → 特定Vault
 ```
 
 ## 実行手順
 
-```bash
-# ノート内容を表示
-obsidian-cli print "{note-name}"
+1. ノート名が指定されていない場合は AskUserQuestion で確認
 
-# パス指定
-obsidian-cli print "{note-path}"
-
-# 指定Vault
-obsidian-cli print "{note-name}" --vault "{vault-name}"
-```
-
-## 使用例
+2. ノート内容を表示:
 
 ```bash
-# ノート内容を表示
-/obs-print meeting-notes
+# 名前で読む（wikilink式解決）
+obsidian read file="note-name"
 
-# パス指定で表示
-/obs-print 001 Notes/project-plan
+# パスで読む
+obsidian read path="folder/note.md"
 
-# 指定Vaultのノートを表示
-/obs-print todo-list --vault work
+# 特定Vault
+obsidian vault=MyVault read file="note-name"
 ```
 
 ## エラーハンドリング
 
 | エラー | 対応 |
 |--------|------|
-| obsidian-cli 未インストール | `brew install yakitrak/yakitrak/obsidian-cli` を提案 |
-| ノートが見つからない | `obsidian-cli list` で候補を検索して提示 |
+| `obsidian` 未検出 | CLI セットアップを案内 |
+| ノートが見つからない | `obsidian search query="..."` で候補を検索して提示 |

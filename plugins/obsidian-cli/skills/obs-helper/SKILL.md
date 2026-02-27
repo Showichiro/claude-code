@@ -1,10 +1,13 @@
 ---
 description: |-
-  Obsidianのノート操作を支援（obsidian-cli連携）。
-  「ノートを開いて」「ノートを作成」「Obsidianに書いて」「Vault」「ノート検索」
-  「デイリーノート」「Frontmatter」「obsidian-cli」「obs」
-  などのキーワードで自動トリガー。
-  obsidian-cliでノートの作成・表示・検索・移動・削除等を実行。
+  This skill should be used when the user asks to "ノートを開いて", "ノートを作成",
+  "Obsidianに書いて", "Vault一覧", "ノートを検索", "デイリーノート", "日報",
+  "Frontmatter", "プロパティ", "タスク一覧", "タグ一覧", "ブックマーク",
+  "バックリンク", "obsidian", "obs", "open note", "create note", "daily note",
+  "search notes", "vault list", or requests any Obsidian note read/write/search operation.
+  Provides workflows for operating Obsidian notes via the official Obsidian CLI
+  (the `obsidian` command), including read, create, search, move, delete,
+  daily notes, properties, tasks, tags, and links.
 allowed-tools:
   - Bash
   - Read
@@ -16,210 +19,110 @@ allowed-tools:
 
 # obs-helper
 
-ユーザーの自然言語リクエストを検知して Obsidian ノートの操作を支援するスキル。
+To operate Obsidian notes, detect the user's natural language intent and execute the appropriate official Obsidian CLI (`obsidian`) command. Respond in the same language the user used.
 
-## トリガーキーワード
+## Prerequisites
 
-### 明示的キーワード
-- `obsidian-cli`, `obs`
-- `Obsidian`（アプリケーションとしてのObsidianへの言及）
-- `Vault`, `ボルト`
+- Obsidian app must be running (first CLI command launches it if not)
+- Settings → General → Command line interface must be enabled
+- macOS: PATH must include `/Applications/Obsidian.app/Contents/MacOS`
 
-### 意図推定キーワード
-- `ノートを開いて`, `ノートを開く`, `ノート開いて`
-- `ノートを作成`, `ノートを書いて`, `メモを作成`, `メモを書いて`
-- `ノートに追記`, `ノートに書き足し`, `メモに追加`
-- `ノートを表示`, `ノートの内容`, `メモを見せて`
-- `ノートを検索`, `ノートを探して`, `メモを検索`
-- `ノートを削除`, `メモを削除`
-- `ノートを移動`, `ノートをリネーム`, `ノート名を変更`
-- `デイリーノート`, `日報`, `今日のノート`
-- `Frontmatter`, `フロントマター`, `メタデータ`
-- `Vault内の`, `Vault一覧`
+## CLI Syntax
 
-### 後続処理キーワード
-- `Obsidianに保存して`, `ノートとして保存`
-- `ノートの内容を要約`, `ノートを読んで`
-- `ノートの内容を更新`, `ノートを書き換えて`
-
-## ワークフロー
+The official Obsidian CLI uses `parameter=value` syntax, NOT `--flag value`.
 
 ```
-キーワード検出
+obsidian <command> [parameter=value ...] [flag ...]
+```
+
+- **Parameters**: `key=value` — quote values with spaces: `name="My Note"`
+- **Flags**: boolean, no value — e.g. `open`, `overwrite`, `total`
+- **Vault targeting**: prepend `vault=<name>` as the first parameter
+- **File targeting**: `file=<name>` (wikilink-style resolution) or `path=<path>` (exact path from vault root)
+- **Newlines**: `\n` — **Tabs**: `\t`
+
+## Core Workflow
+
+```
+Keyword detection
   │
-  ├─ obsidian-cli インストール確認
-  │     └─ 未インストール → brew install yakitrak/yakitrak/obsidian-cli を提案
+  ├─ Verify CLI availability: which obsidian
+  │     └─ Not found → guide setup (Settings → General → CLI)
   │
-  ├─ デフォルトVault確認
-  │     └─ 未設定 → obsidian-cli set-default を案内
+  ├─ Determine intent
+  │     ├─ Read note       → obsidian read file=<name>
+  │     ├─ Open note       → obsidian open file=<name>
+  │     ├─ Create note     → obsidian create name=<name> content="..."
+  │     ├─ Append to note  → obsidian append file=<name> content="..."
+  │     ├─ Search notes    → obsidian search query="..."
+  │     ├─ Move note       → obsidian move file=<name> to=<path>
+  │     ├─ Rename note     → obsidian rename file=<name> name=<new>
+  │     ├─ Delete note     → obsidian delete file=<name> (confirm first)
+  │     ├─ List files      → obsidian files / folders
+  │     ├─ Daily notes     → obsidian daily / daily:read / daily:append
+  │     ├─ Properties      → obsidian property:read / set / remove
+  │     ├─ Tasks           → obsidian tasks / task
+  │     ├─ Tags            → obsidian tags / tag
+  │     ├─ Links           → obsidian backlinks / links / unresolved
+  │     └─ Templates       → obsidian templates / create template=<name>
   │
-  ├─ 意図の判定
-  │     ├─ ノートを開く → obsidian-cli open
-  │     ├─ ノートを作成/更新 → obsidian-cli create
-  │     ├─ ノート内容表示 → obsidian-cli print
-  │     ├─ ノート検索 → obsidian-cli list / search-content
-  │     ├─ ノート移動/リネーム → obsidian-cli move
-  │     ├─ ノート削除 → obsidian-cli delete（要確認）
-  │     ├─ デイリーノート → obsidian-cli daily
-  │     ├─ Frontmatter操作 → obsidian-cli frontmatter
-  │     └─ Vault一覧 → obsidian-cli list
-  │
-  └─ コマンド実行
-        ├─ 成功 → 結果を報告
-        │     ├─ 後続処理あり → 要約・翻訳等を実行
-        │     └─ 後続処理なし → 結果のみ表示
-        └─ エラー → 対処法を案内
+  └─ Execute and report results
+        └─ On follow-up request → summarize, translate, analyze, etc.
 ```
 
-## 意図の推定ロジック
+## Intent Mapping
 
-| ユーザーの発言例 | 推定される操作 |
-|-----------------|---------------|
-| 「Obsidianでノートを開いて」 | obsidian-cli open（ノート名を確認） |
-| 「meeting-notesを見せて」 | obsidian-cli print "meeting-notes" |
-| 「新しいメモを作って」 | obsidian-cli create（名前と内容を確認） |
-| 「このテキストをObsidianに保存して」 | obsidian-cli create --content "..." |
-| 「ノートに追記して」 | obsidian-cli create --append --content "..." |
-| 「デイリーノートを開いて」 | obsidian-cli daily |
-| 「Vaultの中身を見せて」 | obsidian-cli list |
-| 「ノートを検索して」 | obsidian-cli list / search-content |
-| 「ノートを移動して」 | obsidian-cli move（パスを確認） |
-| 「不要なノートを消して」 | obsidian-cli delete（要確認） |
-| 「Frontmatterを確認して」 | obsidian-cli frontmatter --print |
-| 「ステータスをdoneに変更」 | obsidian-cli frontmatter --edit --key status --value done |
-| 「Obsidianの○○を読んで要約して」 | obsidian-cli print → 内容を要約 |
+| User says | Execute |
+|-----------|---------|
+| 「ノートを開いて」 | `obsidian open file=<name>` |
+| 「○○を見せて」 | `obsidian read file="○○"` |
+| 「メモを作って」 | `obsidian create name=<name> content="..."` |
+| 「Obsidianに保存して」 | `obsidian create name=<name> content="..."` |
+| 「ノートに追記」 | `obsidian append file=<name> content="..."` |
+| 「デイリーノートを開いて」 | `obsidian daily` |
+| 「デイリーにタスク追加」 | `obsidian daily:append content="- [ ] ..."` |
+| 「Vaultの中身」 | `obsidian files` / `obsidian folders` |
+| 「inboxの一覧」 | `obsidian files folder=inbox` |
+| 「ノートを検索」 | `obsidian search query="..."` |
+| 「○○を含むノート」 | `obsidian search:context query="..."` |
+| 「ノートを移動」 | `obsidian move file=<name> to=<path>` |
+| 「ノートを削除」 | `obsidian delete file=<name>` (confirm first) |
+| 「プロパティを確認」 | `obsidian properties file=<name>` |
+| 「ステータスをdoneに」 | `obsidian property:set name=status value=done file=<name>` |
+| 「未完了タスク一覧」 | `obsidian tasks todo` |
+| 「タスクを完了に」 | `obsidian task ref="path:line" done` |
+| 「タグ一覧」 | `obsidian tags counts` |
+| 「バックリンク確認」 | `obsidian backlinks file=<name>` |
+| 「○○を読んで要約」 | `obsidian read file=<name>` → summarize content |
 
-## 実行コマンド
+## Vault Path for Glob/Grep Fallback
 
-### インストール確認
+Retrieve the Vault path and use Glob/Grep tools for more flexible file content searches:
 
 ```bash
-which obsidian-cli
+obsidian vault info=path
 ```
 
-未インストールの場合:
-```bash
-brew tap yakitrak/yakitrak && brew install yakitrak/yakitrak/obsidian-cli
-```
+## Error Handling
 
-### デフォルトVault確認
+| Situation | Action |
+|-----------|--------|
+| `obsidian` command not found | Guide CLI setup (Settings → General → CLI) |
+| Obsidian app not running | First command launches the app automatically |
+| Note not found | Search with `obsidian search query="..."` and suggest candidates |
+| Vault not found | Show vault list with `obsidian vaults verbose` |
 
-```bash
-obsidian-cli print-default
-```
+## Important Rules
 
-### ノートを開く
+- Confirm with AskUserQuestion on ambiguous requests
+- Always confirm before delete operations (default goes to trash, but confirm anyway)
+- Use `obsidian read` to fetch note content, then apply follow-up processing (summarize, translate, analyze)
+- Prepend `vault=<name>` when targeting a specific vault
+- Choose `file=<name>` (name resolution) vs `path=<path>` (exact path) appropriately
 
-```bash
-obsidian-cli open "{note-name}"
-obsidian-cli open "{note-name}" --section "{heading}"
-obsidian-cli open "{note-name}" --vault "{vault-name}"
-```
+## Additional Resources
 
-### デイリーノート
+### Reference Files
 
-```bash
-obsidian-cli daily
-obsidian-cli daily --vault "{vault-name}"
-```
-
-### ノート内容表示
-
-```bash
-obsidian-cli print "{note-name}"
-obsidian-cli print "{note-name}" --vault "{vault-name}"
-```
-
-### ノート作成・更新
-
-```bash
-# 空のノート作成
-obsidian-cli create "{note-name}"
-
-# 内容付き作成
-obsidian-cli create "{note-name}" --content "内容"
-
-# 上書き
-obsidian-cli create "{note-name}" --content "内容" --overwrite
-
-# 追記
-obsidian-cli create "{note-name}" --content "追記" --append
-
-# 作成後に開く
-obsidian-cli create "{note-name}" --content "内容" --open
-```
-
-### Vault一覧
-
-```bash
-obsidian-cli list
-obsidian-cli list "subfolder"
-```
-
-### ノート内容検索
-
-```bash
-obsidian-cli search-content "検索語"
-```
-
-注意: `search` と `search-content` は対話的UIを使用するため、Claude から直接呼び出す場合は `list` + `print` の組み合わせで代替する。
-Vault内のファイルを探す場合は `obsidian-cli list` でフォルダを辿るか、`obsidian-cli print-default --path-only` でVaultパスを取得して Glob/Grep ツールで検索する。
-
-### ノート移動・リネーム
-
-```bash
-obsidian-cli move "{current-path}" "{new-path}"
-obsidian-cli move "{current-path}" "{new-path}" --open
-```
-
-### ノート削除
-
-```bash
-obsidian-cli delete "{note-path}"
-```
-
-### Frontmatter操作
-
-```bash
-# 表示
-obsidian-cli frontmatter "{note-name}" --print
-
-# 編集
-obsidian-cli frontmatter "{note-name}" --edit --key "key" --value "value"
-
-# 削除
-obsidian-cli frontmatter "{note-name}" --delete --key "key"
-```
-
-## Vault内ファイル検索の補助
-
-`search` / `search-content` は対話的UIのため、ファイル検索には以下を使用:
-
-```bash
-# Vaultパスを取得
-VAULT_PATH=$(obsidian-cli print-default --path-only)
-
-# Glob ツールでノートを検索
-# パターン: ${VAULT_PATH}/**/*.md
-
-# Grep ツールでノート内容を検索
-# パス: ${VAULT_PATH}
-```
-
-## エラーハンドリング
-
-| エラー状況 | 対応 |
-|-----------|------|
-| obsidian-cli 未インストール | `brew tap yakitrak/yakitrak && brew install yakitrak/yakitrak/obsidian-cli` を提案 |
-| デフォルトVault未設定 | `obsidian-cli set-default "{vault-name}"` を案内 |
-| ノートが見つからない | `obsidian-cli list` で候補を表示、Glob で検索 |
-| 権限エラー | ファイル権限の確認を案内 |
-| Obsidianアプリが起動していない | `open` コマンドがObsidianを起動することを案内 |
-
-## 補足
-
-- 曖昧なリクエストの場合は AskUserQuestion で確認
-- 削除操作は必ずユーザーに確認を取ってから実行
-- `obsidian-cli print` でノート内容を取得→後続処理（要約、翻訳、分析等）に活用可能
-- `search` / `search-content` は対話的UIのため、Claudeからの直接実行には向かない。代わりに `list` + `print` または Glob/Grep で代替
-- Vault のパスは `obsidian-cli print-default --path-only` で取得可能
+To look up exact parameters, flags, or usage examples for any command, read:
+- **`references/obsidian-cli-cheatsheet.md`** — Full CLI cheatsheet covering vault, files, read/write, daily notes, search, tags, tasks, properties, links, templates, bookmarks, plugins, history, workspaces, and developer commands

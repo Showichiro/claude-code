@@ -1,8 +1,8 @@
 ---
 description: |-
   Obsidianのノートを削除する。
-  「/obs-delete <note-path> [options]」でノートを削除。
-  --vault オプションをサポート。
+  「/obs-delete <note> [options]」でノートを削除。
+  file=, path=, permanent, vault= をサポート。
 allowed-tools:
   - Bash
   - AskUserQuestion
@@ -10,52 +10,33 @@ allowed-tools:
 
 # obs-delete
 
-obsidian-cli を使用してノートを削除するコマンド。
+公式 Obsidian CLI を使用してノートを削除するコマンド。
 
-## ワークフロー
+## 使い方
 
 ```
-/obs-delete <note-path> [options] 実行
-  │
-  ├─ obsidian-cli インストール確認
-  │
-  ├─ ノートパス確認
-  │     ├─ 引数あり → そのまま使用
-  │     └─ 引数なし → AskUserQuestion で確認
-  │
-  ├─ 確認
-  │     └─ ユーザーに削除の最終確認を行う
-  │
-  └─ obsidian-cli delete 実行
-        ├─ 成功 → 削除完了を報告
-        └─ エラー → 対処法を提案
+/obs-delete old-draft             → ゴミ箱へ移動
+/obs-delete old-draft permanent   → 完全削除
+/obs-delete old-draft vault=Work  → 特定Vault
 ```
 
 ## 実行手順
 
-**重要**: 削除は取り消せないため、実行前に必ずユーザーに確認する。
+1. ノート名が指定されていない場合は AskUserQuestion で確認
+2. **削除前に必ずユーザーに最終確認を行う**
 
 ```bash
-# ノートを削除
-obsidian-cli delete "{note-path}"
+# ゴミ箱へ移動（デフォルト）
+obsidian delete file="note-name"
+obsidian delete path="folder/note.md"
 
-# 指定Vault
-obsidian-cli delete "{note-path}" --vault "{vault-name}"
-```
-
-## 使用例
-
-```bash
-# ノートを削除
-/obs-delete old-draft.md
-
-# 指定Vaultのノートを削除
-/obs-delete archive/old-note.md --vault work
+# 完全削除
+obsidian delete file="note-name" permanent
 ```
 
 ## エラーハンドリング
 
 | エラー | 対応 |
 |--------|------|
-| obsidian-cli 未インストール | `brew install yakitrak/yakitrak/obsidian-cli` を提案 |
-| ノートが見つからない | `obsidian-cli list` で正しいパスを確認 |
+| `obsidian` 未検出 | CLI セットアップを案内 |
+| ノートが見つからない | `obsidian search query="..."` で正しい名前を確認 |

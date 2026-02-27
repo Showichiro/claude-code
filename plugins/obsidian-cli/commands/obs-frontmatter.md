@@ -1,8 +1,8 @@
 ---
 description: |-
-  ObsidianノートのYAML Frontmatterを操作する。
-  「/obs-frontmatter <note-name> [options]」でFrontmatterの表示・編集・削除。
-  --print, --edit, --delete, --key, --value, --vault オプションをサポート。
+  Obsidianノートのプロパティ（Frontmatter）を操作する。
+  「/obs-frontmatter <note> [options]」でプロパティの表示・編集・削除。
+  property:read, property:set, property:remove をサポート。
 allowed-tools:
   - Bash
   - Read
@@ -11,65 +11,47 @@ allowed-tools:
 
 # obs-frontmatter
 
-obsidian-cli を使用してノートの YAML Frontmatter を操作するコマンド。エイリアス: `fm`
+公式 Obsidian CLI を使用してノートのプロパティ（YAML Frontmatter）を操作するコマンド。
 
-## ワークフロー
+## 使い方
 
 ```
-/obs-frontmatter <note-name> [options] 実行
-  │
-  ├─ obsidian-cli インストール確認
-  │
-  ├─ ノート名確認
-  │     ├─ 引数あり → そのまま使用
-  │     └─ 引数なし → AskUserQuestion で確認
-  │
-  ├─ 操作の判定
-  │     ├─ --print → Frontmatter を表示
-  │     ├─ --edit --key --value → フィールドを編集（なければ作成）
-  │     └─ --delete --key → フィールドを削除
-  │
-  └─ obsidian-cli frontmatter 実行
-        ├─ 成功 → 結果を表示
-        └─ エラー → 対処法を提案
+/obs-frontmatter Recipe                             → プロパティ一覧
+/obs-frontmatter Recipe read status                 → 特定プロパティの値
+/obs-frontmatter Recipe set status done             → プロパティを設定
+/obs-frontmatter Recipe remove draft                → プロパティを削除
 ```
 
 ## 実行手順
 
-```bash
-# Frontmatterを表示
-obsidian-cli frontmatter "{note-name}" --print
+1. ノート名が指定されていない場合は AskUserQuestion で確認
 
-# フィールドを編集（存在しなければ作成）
-obsidian-cli frontmatter "{note-name}" --edit --key "status" --value "done"
-
-# フィールドを削除
-obsidian-cli frontmatter "{note-name}" --delete --key "draft"
-
-# 指定Vault
-obsidian-cli frontmatter "{note-name}" --print --vault "{vault-name}"
-```
-
-## 使用例
+2. プロパティ操作:
 
 ```bash
-# Frontmatterを表示
-/obs-frontmatter project-plan --print
+# プロパティ一覧
+obsidian properties file="note-name"
 
-# ステータスを更新
-/obs-frontmatter meeting-notes --edit --key status --value reviewed
+# 特定プロパティの値を読む
+obsidian property:read name=status file="note-name"
 
-# タグを追加
-/obs-frontmatter article --edit --key tags --value "tech, tutorial"
+# プロパティを設定（存在しなければ作成）
+obsidian property:set name=status value=done file="note-name"
 
-# 不要なフィールドを削除
-/obs-frontmatter draft --delete --key wip
+# 型指定付きで設定
+obsidian property:set name=tags value="tech, tutorial" type=list file="note-name"
+
+# プロパティを削除
+obsidian property:remove name=draft file="note-name"
+
+# 特定Vault
+obsidian vault=MyVault properties file="note-name"
 ```
 
 ## エラーハンドリング
 
 | エラー | 対応 |
 |--------|------|
-| obsidian-cli 未インストール | `brew install yakitrak/yakitrak/obsidian-cli` を提案 |
-| ノートが見つからない | `obsidian-cli list` で正しいパスを確認 |
-| Frontmatterが存在しない | `--edit` で新規作成を提案 |
+| `obsidian` 未検出 | CLI セットアップを案内 |
+| ノートが見つからない | `obsidian search query="..."` で正しい名前を確認 |
+| プロパティが存在しない | `property:set` で新規作成を提案 |
