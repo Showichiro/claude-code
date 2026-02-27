@@ -1,8 +1,9 @@
 ---
 description: |-
   Obsidianのノートを移動・リネームする。
-  「/obs-move <current-path> <new-path> [options]」で移動/リネーム。
-  Vault内のリンクも自動更新される。--vault, --open オプションをサポート。
+  「/obs-move <note> <destination>」で移動。
+  「/obs-move rename <note> <new-name>」でリネーム。
+  Vault内のリンクも自動更新される。
 allowed-tools:
   - Bash
   - AskUserQuestion
@@ -10,54 +11,35 @@ allowed-tools:
 
 # obs-move
 
-obsidian-cli を使用してノートを移動・リネームするコマンド。Vault 内のリンクも自動的に更新される。
+公式 Obsidian CLI を使用してノートを移動・リネームするコマンド。内部リンクも自動的に更新される。
 
-## ワークフロー
+## 使い方
 
 ```
-/obs-move <current-path> <new-path> [options] 実行
-  │
-  ├─ obsidian-cli インストール確認
-  │
-  ├─ パス確認
-  │     ├─ 引数2つあり → そのまま使用
-  │     └─ 引数不足 → AskUserQuestion で確認
-  │
-  └─ obsidian-cli move 実行
-        ├─ 成功 → 移動完了とリンク更新を報告
-        └─ エラー → 対処法を提案
+/obs-move Note archive/Note.md             → 移動
+/obs-move rename Note "New Name"            → リネーム
+/obs-move Note archive/Note.md vault=Work   → 特定Vault
 ```
 
 ## 実行手順
 
 ```bash
-# ノートを移動/リネーム
-obsidian-cli move "{current-note-path}" "{new-note-path}"
+# ノートを移動
+obsidian move file="note-name" to="archive/note.md"
+obsidian move path="inbox/note.md" to="archive/note.md"
 
-# 指定Vault
-obsidian-cli move "{current-note-path}" "{new-note-path}" --vault "{vault-name}"
+# ノートをリネーム（拡張子は自動保持）
+obsidian rename file="note-name" name="new-name"
+obsidian rename path="folder/note.md" name="new-name"
 
-# 移動後にObsidianで開く
-obsidian-cli move "{current-note-path}" "{new-note-path}" --open
-```
-
-## 使用例
-
-```bash
-# リネーム
-/obs-move old-name.md new-name.md
-
-# フォルダ間の移動
-/obs-move inbox/note.md archive/note.md
-
-# 移動後に開く
-/obs-move draft.md published/article.md --open
+# 特定Vault
+obsidian vault=MyVault move file="note-name" to="archive/note.md"
 ```
 
 ## エラーハンドリング
 
 | エラー | 対応 |
 |--------|------|
-| obsidian-cli 未インストール | `brew install yakitrak/yakitrak/obsidian-cli` を提案 |
-| 元ノートが見つからない | `obsidian-cli list` で正しいパスを確認 |
+| `obsidian` 未検出 | CLI セットアップを案内 |
+| 元ノートが見つからない | `obsidian search query="..."` で正しい名前を確認 |
 | 移動先が既に存在 | ユーザーに確認して対応を決定 |

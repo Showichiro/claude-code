@@ -1,11 +1,11 @@
 {
   "name": "obsidian-cli",
-  "version": "1.0.0",
-  "description": "Obsidian CLIを使ったノート操作を支援するプラグイン",
+  "version": "2.0.0",
+  "description": "公式 Obsidian CLI (obsidian コマンド) を使ったノート操作を支援するプラグイン",
   "author": {
     "name": "Showichiro"
   },
   "repository": "https://github.com/Showichiro/claude-code",
   "license": "GPL-3.0",
-  "keywords": ["obsidian", "obsidian-cli", "note", "vault", "markdown", "ノート", "ナレッジベース"]
+  "keywords": ["obsidian", "obsidian-cli", "note", "vault", "markdown", "search", "daily", "tasks", "tags"]
 }
